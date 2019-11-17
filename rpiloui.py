@@ -50,8 +50,7 @@ class sampleclass:
 ################################################################################
 # Import external functions
 
-# import lib.message    as msg
-# import lib.config    as cfg
+import lib.config    as cfg
 
 ################################################################################
 # Functions
@@ -65,12 +64,13 @@ def signal_handler(signal, frame):
 
 # init global vars
 
+# print welcome msg with app name and build version
+print('\nrpiloui ' + BUILDVERSION + ' - ' + BUILDDATE)
+
 # load config data from configuration file
-# cfg.read(cfg)
+cfg.read(cfg)
 
 if len(sys.argv) == 1:
-    print('\nrpiloui ' + BUILDVERSION + ' - ' + BUILDDATE)
-    
     # check for modules which might not be part of the standard python 3 installation
     if 'ModulSerialMissing' in locals():
         print('Missing Module pyserial. Install by typing pye-motion -install')
