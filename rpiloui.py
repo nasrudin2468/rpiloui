@@ -65,21 +65,23 @@ def signal_handler(signal, frame):
 # init global vars
 
 # print welcome msg with app name and build version
-print('\nrpiloui ' + BUILDVERSION + ' - ' + BUILDDATE)
+print('rpiloui ' + BUILDVERSION + ' - ' + BUILDDATE)
+
+# check for modules which might not be part of the standard python 3 installation
+if 'ModulSerialMissing' in locals():
+    print('\nMissing Module pyserial. Install by typing pye-motion -install')
 
 # load config data from configuration file
 cfg.read(cfg)
 
+# check for given command line arguments
 if len(sys.argv) == 1:
-    # check for modules which might not be part of the standard python 3 installation
-    if 'ModulSerialMissing' in locals():
-        print('Missing Module pyserial. Install by typing pye-motion -install')
-        
-    print('No command line argument given. type pye-motion -help for valid arguments')
+    print('\nNo command line argument given. type pye-motion -help for valid arguments')
+    exit()
     
 if len(sys.argv) != 1:
     if (sys.argv[1] in ("-help")):
-        print("not implemented. ")
+        print("\nnot implemented. ")
         #arg.help()
         exit()
         
@@ -102,4 +104,5 @@ if len(sys.argv) != 1:
         
     else: 
         print('Invalid command line argument given. type pye-motion - help for valid arguments')
+        exit()
 
