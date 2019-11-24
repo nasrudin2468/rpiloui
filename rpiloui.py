@@ -78,7 +78,7 @@ cfg.read(cfg)
 
 # check for given command line arguments
 if len(sys.argv) == 1:
-    print('\nNo command line argument given. type pye-motion -help for valid arguments')
+    print('\nNo command line argument given. type rpiloui -help for valid arguments')
     exit()
     
 if len(sys.argv) != 1:
@@ -109,6 +109,6 @@ if len(sys.argv) != 1:
     
         
     else: 
-        print('Invalid command line argument given. type pye-motion - help for valid arguments')
+        print('Invalid command line argument given. type rpiloui - help for valid arguments')
         exit()
 
