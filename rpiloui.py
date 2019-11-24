@@ -96,7 +96,7 @@ if len(sys.argv) != 1:
         exit()
     
     elif (sys.argv[1] in ( "-update")):    
-        subprocess.call("update.sh", shell=True)
+        subprocess.call("./update.sh", shell=True)
         exit()
     
     elif (sys.argv[1] in ( "-simulate")):
