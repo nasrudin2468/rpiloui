@@ -51,6 +51,7 @@ class sampleclass:
 # Import external functions
 
 import lib.config    as cfg
+import subprocess
 
 ################################################################################
 # Functions
@@ -63,6 +64,7 @@ def signal_handler(signal, frame):
 # beginn main
 
 # init global vars
+cmdupdate = "cd .."
 
 # print welcome msg with app name and build version
 print('rpiloui ' + BUILDVERSION + ' - ' + BUILDDATE)
@@ -91,6 +93,10 @@ if len(sys.argv) != 1:
         
     elif (sys.argv[1] in ( "-play")):
         print("not implemented. ")
+        exit()
+    
+    elif (sys.argv[1] in ( "-update")):    
+        subprocess.call("update.sh", shell=True)
         exit()
     
     elif (sys.argv[1] in ( "-simulate")):
