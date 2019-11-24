@@ -95,7 +95,8 @@ if len(sys.argv) != 1:
         print("not implemented. ")
         exit()
     
-    elif (sys.argv[1] in ( "-update")):    
+    elif (sys.argv[1] in ( "-update")):
+        subprocess.call("chmod u+x ./update.sh", shell=True)    
         subprocess.call("./update.sh", shell=True)
         exit()
     
