@@ -89,8 +89,10 @@ cfg.read(cfg)
 if len(sys.argv) == 1:
     print('\nNo command line argument given. type rpiloui -help for valid arguments')
     
-    motor = gpiozero.output_devices.PWMOutputDevice(15, True, 0, 1, None)
-    motor.toggle(0.5)
+    motor = gpiozero.output_devices.PWMOutputDevice(2, True, 0, 1, None)
+    motor.value=0.5
+    motor.toggle()
+    
     
     rawtx = input("press enter to exit")
     exit()
