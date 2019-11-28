@@ -32,6 +32,12 @@ except ImportError:
     pass
     ModulSerialMissing = True
 
+try:
+    import gpiozero
+except ImportError:
+    pass
+    ModulgpiozeroMissing = True
+
 
 ################################################################################
 # Constants
@@ -72,13 +78,21 @@ print('rpiloui ' + BUILDVERSION + ' - ' + BUILDDATE)
 # check for modules which might not be part of the standard python 3 installation
 if 'ModulSerialMissing' in locals():
     print('\nMissing Module pyserial. Install by typing pye-motion -install')
-
+if 'ModulgpiozeroMissing' in locals():
+    print('\nMissing Module gpiozero. Install by typing pye-motion -install')
+    
 # load config data from configuration file
 cfg.read(cfg)
+
 
 # check for given command line arguments
 if len(sys.argv) == 1:
     print('\nNo command line argument given. type rpiloui -help for valid arguments')
+    
+    motor = gpiozero.output_devices.PWMOutputDevice(15, True, 0, 1, None)
+    motor.toggle(0.5)
+    
+    rawtx = input("press enter to exit")
     exit()
     
 if len(sys.argv) != 1:
