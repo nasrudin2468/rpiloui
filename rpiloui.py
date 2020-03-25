@@ -77,9 +77,9 @@ print('rpiloui ' + BUILDVERSION + ' - ' + BUILDDATE)
 
 # check for modules which might not be part of the standard python 3 installation
 if 'ModulSerialMissing' in locals():
-    print('\nMissing Module pyserial. Install by typing pye-motion -install')
+    print('\nMissing Module pyserial. Install by typing rpiloui -install')
 if 'ModulgpiozeroMissing' in locals():
-    print('\nMissing Module gpiozero. Install by typing pye-motion -install')
+    print('\nMissing Module gpiozero. Install by typing rpiloui -install')
     
 # load config data from configuration file
 cfg.read(cfg)
@@ -89,9 +89,10 @@ cfg.read(cfg)
 if len(sys.argv) == 1:
     print('\nNo command line argument given. type rpiloui -help for valid arguments')
     
-    motor = gpiozero.output_devices.PWMOutputDevice(2, True, 0, 1, None)
-    motor.value=0.5
-    motor.toggle()
+    # PWM test
+    #motor = gpiozero.output_devices.PWMOutputDevice(2, True, 0, 1, None)
+    #motor.value=0.5
+    #motor.toggle()
     
     
     rawtx = input("press enter to exit")
