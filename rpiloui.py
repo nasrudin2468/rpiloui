@@ -124,6 +124,10 @@ if len(sys.argv) != 1:
     elif (sys.argv[1] in ( "-run-unittests")):    
         print("not implemented. ")
         exit()
+        
+    elif (sys.argv[1] in ( "-hwtest")):    
+        print("not implemented. ")
+        exit()
     
         
     else: 
