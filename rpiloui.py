@@ -5,7 +5,7 @@
 #
 # This code is released under: 
 #
-# Copyright (c) 2019 nasrudin2468
+# Copyright (c) 2020 nasrudin2468
 #
 # TODO: licence text
 #
@@ -95,16 +95,13 @@ if len(sys.argv) == 1:
     #motor = gpiozero.output_devices.PWMOutputDevice(2, True, 0, 1, None)
     #motor.value=0.5
     #motor.toggle()
-    
-    
-    rawtx = input("press enter to exit")
-    exit()
+
     
 if len(sys.argv) != 1:
     if (sys.argv[1] in ("-help")):
-        print("\nnot implemented. ")
+        print("not implemented. ")
         #arg.help()
-        exit()
+
         
     elif (sys.argv[1] in ( "-install")):
         print("Install required libraries. Requires internet connection! Might need admin / root...")
