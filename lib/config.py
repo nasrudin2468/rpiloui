@@ -15,20 +15,8 @@
 ################################################################################
 # Import Libraries
 
-import array
-import binascii
 import configparser
-import datetime
-import io
-import logging
-import os
-import sys
-import time
 
-try:
-	import serial
-except ImportError:
-	pass
 
 
 ################################################################################
