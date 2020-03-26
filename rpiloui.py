@@ -22,7 +22,9 @@ import datetime
 import io
 import logging
 import os
+import pip
 import signal
+import subprocess
 import sys
 import time
 
@@ -57,7 +59,7 @@ class sampleclass:
 # Import external functions
 
 import lib.config    as cfg
-import subprocess
+
 
 ################################################################################
 # Functions
@@ -105,6 +107,18 @@ if len(sys.argv) != 1:
         exit()
         
     elif (sys.argv[1] in ( "-install")):
+        print("Install required libraries. Requires internet connection! Might need admin / root...")
+        
+        print("Installing pyserial via pip... ")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "pyserial"])
+
+        print("Installing gpiozero via pip... ")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "gpiozero"])
+
+        
+        print("Installing pyserial via pip... ")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "apa102-pi"])
+   
         #arg.install()
         exit()
         
