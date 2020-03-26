@@ -34,9 +34,9 @@ import configparser
 ################################################################################
 # Functions
 
-# function:	read(message)
-# 	-
-# 	Input:	name of array
+# function:	read(arrcfg)
+# 	- 	reads config file and saves variables into given array
+# 	Input:	name of array to save 
 #	Output:	modifies input
 def read(arrcfg):
 	# create new Parser and read file
@@ -51,26 +51,49 @@ def read(arrcfg):
 	# -
 	
 	#CALIBRATION
-	arrcfg.maxduty 		= config['CALIBRATION']['maxduty']
-	arrcfg.dirdeathtime = config['CALIBRATION']['dirdeathtime']
+	arrcfg.maxduty 		= int(config['CALIBRATION']['maxduty'])
+	arrcfg.pwmfreq		= int(config['CALIBRATION']['pwmfreq'])
+	arrcfg.dirdeathtime = int(config['CALIBRATION']['dirdeathtime'])
 	
 	#PINMAPPING
-	arrcfg.led_di 		= config['PINMAPPING']['led-di']
-	arrcfg.led_ci 		= config['PINMAPPING']['led-ci']
+	arrcfg.led_di 		= int(config['PINMAPPING']['led-di'])
+	arrcfg.led_ci 		= int(config['PINMAPPING']['led-ci'])
 	
-	arrcfg.motor_cw 	= config['PINMAPPING']['motor-cw']
-	arrcfg.motor_ccw 	= config['PINMAPPING']['motor-ccw']
+	arrcfg.motor_cw 	= int(config['PINMAPPING']['motor-cw'])
+	arrcfg.motor_ccw 	= int(config['PINMAPPING']['motor-ccw'])
 	
-	arrcfg.mux_0		= config['PINMAPPING']['mux-0']
-	arrcfg.mux_1		= config['PINMAPPING']['mux-1']
-	arrcfg.mux_2		= config['PINMAPPING']['mux-2']
-	arrcfg.mux_3		= config['PINMAPPING']['mux-3']
-	arrcfg.mux_4		= config['PINMAPPING']['mux-4']
-	arrcfg.mux_5		= config['PINMAPPING']['mux-5']
-	arrcfg.mux_6		= config['PINMAPPING']['mux-6']
-	arrcfg.mux_7		= config['PINMAPPING']['mux-7']
+	arrcfg.mux_0		= int(config['PINMAPPING']['mux-0'])
+	arrcfg.mux_1		= int(config['PINMAPPING']['mux-1'])
+	arrcfg.mux_2		= int(config['PINMAPPING']['mux-2'])
+	arrcfg.mux_3		= int(config['PINMAPPING']['mux-3'])
+	arrcfg.mux_4		= int(config['PINMAPPING']['mux-4'])
+	arrcfg.mux_5		= int(config['PINMAPPING']['mux-5'])
+	arrcfg.mux_6		= int(config['PINMAPPING']['mux-6'])
+	arrcfg.mux_7		= int(config['PINMAPPING']['mux-7'])
 	
-	arrcfg.mux_coin		= config['PINMAPPING']['mux-coin']
-	arrcfg.mux_tilt		= config['PINMAPPING']['mux-tilt']
-	arrcfg.mux_action	= config['PINMAPPING']['mux-action']
+	arrcfg.mux_coin		= int(config['PINMAPPING']['mux-coin'])
+	arrcfg.mux_tilt		= int(config['PINMAPPING']['mux-tilt'])
+	arrcfg.mux_action	= int(config['PINMAPPING']['mux-action'])
+	return
+
+# function:	sanitize(arrcfg)
+# 	-	checks array variables for faulty values and abort program
+#	  	in order to prevent hardware damage
+# 	Input:	name of array
+#	Output:	modifies input
+def sanitize(arrcfg):
+	
+	if arrcfg.maxduty <= 1:
+			arrcfg.maxduty = 1
+	
+	if arrcfg.maxduty > 100:
+			arrcfg.maxduty = 100
+			
+	if arrcfg.dirdeathtime < 1:
+			arrcfg.dirdeathtime = 1
+			
+	if arrcfg.dirdeathtime > 1000:
+			arrcfg.dirdeathtime = 1000
+			
+	return
 	
