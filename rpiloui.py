@@ -100,42 +100,32 @@ if len(sys.argv) == 1:
 if len(sys.argv) != 1:
     if (sys.argv[1] in ("-help")):
         print("not implemented. ")
-        #arg.help()
+        exit()
 
-        
     elif (sys.argv[1] in ( "-install")):
         print("Install required libraries. Requires internet connection! Might need admin / root...")
-        
+
         print("Installing pyserial via pip... ")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "pyserial"])
-
         print("Installing gpiozero via pip... ")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "gpiozero"])
-
-        
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "gpiozero"])            
         print("Installing pyserial via pip... ")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "apa102-pi"])
-   
-        #arg.install()
         exit()
-        
+     
     elif (sys.argv[1] in ( "-play")):
         print("not implemented. ")
         exit()
-    
+ 
     elif (sys.argv[1] in ( "-update")):
         subprocess.call("chmod u+x ./update.sh", shell=True)    
         subprocess.call("./update.sh", shell=True)
         exit()
-    
+  
     elif (sys.argv[1] in ( "-simulate")):
         print("not implemented. ")
         exit()
-    
-    elif (sys.argv[1] in ( "-run-unittests")):    
-        print("not implemented. ")
-        exit()
-        
+
     elif (sys.argv[1] in ( "-hwtest")):  
         print("hardware testmodus.")
         
@@ -190,11 +180,7 @@ if len(sys.argv) != 1:
             
         print("hardware test finished.")
         exit()
-        
-        
     
-        
     else: 
         print('Invalid command line argument given. type rpiloui - help for valid arguments')
         exit()
-
