@@ -136,9 +136,62 @@ if len(sys.argv) != 1:
         print("not implemented. ")
         exit()
         
-    elif (sys.argv[1] in ( "-hwtest")):    
-        print("not implemented. ")
+    elif (sys.argv[1] in ( "-hwtest")):  
+        print("hardware testmodus.")
+        
+        rawtx = ""   
+        rawtx = input(" - LED test: (enter n if you want to skip this test)")
+        if (rawtx != "n"):
+            i = 0
+            while (i < 140):
+                # Todo: implement routine which lights up sequentially all installed APA102 LEDs
+                print ("LED:",i)
+                time.sleep(0.1)
+                i+=1  
+            print("   ...done!\n")
+            # Todo: Shut off all LEDs
+        else:
+            print ("test skipped.\n")        
+        
+        rawtx = ""
+        rawtx = input(" - motor test: (enter n if you want to skip this test)")
+        if (rawtx != "n"):
+            # Todo: Implement routine which uses PWM outputs to check the motor driver hardware
+            
+            print(" forward speed 50%...")
+            time.sleep(1)
+            print(" forward speed 100%...")
+            time.sleep(1)
+            print(" speed 0%...")
+            time.sleep(1)
+            print(" backward speed 50%...")
+            time.sleep(1)
+            print(" backward speed 100%...")
+            time.sleep(1)
+            print(" speed 0%...")
+            time.sleep(1)
+            print("   ...done!\n")
+        else:
+            print ("test skipped.\n")
+        
+        rawtx = ""
+        rawtx = input(" - mux input testt: (enter n if you want to skip this test)")
+        if (rawtx != "n"):
+            print ("   stop mux test by pressing CTRL + C")
+            k = 0
+            while (1):  
+                # TODO: Implement method which periodically scans all muxed inputs, compares
+                # the new state to the old ones and reports changes via cmd line, until CTRL + C
+                # is pressed
+                k = 0
+   
+        else:
+            print ("test skipped.\n")
+            
+        print("hardware test finished.")
         exit()
+        
+        
     
         
     else: 
