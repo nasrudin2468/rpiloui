@@ -83,8 +83,10 @@ if 'ModulSerialMissing' in locals():
 if 'ModulgpiozeroMissing' in locals():
     print('\nMissing Module gpiozero. Install by typing rpiloui -install')
     
-# load config data from configuration file
+# load config data from configuration file, check for valid data and sanitize
+# if necessary
 cfg.read(cfg)
+cfg.sanitize(cfg)
 
 
 # check for given command line arguments
