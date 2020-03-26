@@ -59,7 +59,7 @@ class sampleclass:
 ################################################################################
 # Import external functions
 
-import lib.config    as cfg
+import lib.config as cfg
 
 
 ################################################################################
@@ -193,10 +193,9 @@ if len(sys.argv) != 1:
             print ("test skipped.\n")
         
         rawtx = ""
-        rawtx = input(" - mux input testt: (enter n if you want to skip this test)")
+        rawtx = input(" - mux input test: (enter n if you want to skip this test)")
         if (rawtx != "n"):
             print ("   stop mux test by pressing CTRL + C")
-            k = 0
             while (1):  
                 # TODO: Implement method which periodically scans all muxed inputs, compares
                 # the new state to the old ones and reports changes via cmd line, until CTRL + C
@@ -207,6 +206,7 @@ if len(sys.argv) != 1:
             print ("test skipped.\n")
             
         print("hardware test finished.")
+        
         exit()
     
     else: 
