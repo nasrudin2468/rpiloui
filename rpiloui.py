@@ -15,6 +15,7 @@
 ################################################################################
 # Import Libraries
 
+import apa102_pi
 import array
 import binascii
 import configparser
@@ -131,12 +132,14 @@ if len(sys.argv) != 1:
         rawtx = input(" - LED test: (enter n if you want to skip this test)")
         if (rawtx != "n"):
             i = 0
-            while (i < 140):
-                # Todo: implement routine which lights up sequentially all installed APA102 LEDs
-                print ("LED:",i)
-                time.sleep(0.1)
-                i+=1  
-            print("   ...done!\n")
+            subprocess.call("py runcolorcycle.py", shell=True) 
+            
+            #while (i < 140):
+            #    # Todo: implement routine which lights up sequentially all installed APA102 LEDs
+            #    print ("LED:",i)
+            #    time.sleep(0.1)
+            #    i+=1  
+            #print("   ...done!\n")
             # Todo: Shut off all LEDs
         else:
             print ("test skipped.\n")        
