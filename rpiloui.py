@@ -149,44 +149,34 @@ if len(sys.argv) != 1:
         if (rawtx != "n"):
             # Configure gpiozero pwm function
             # gpiozero.PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pin_factory=None)
-            motor_cw        = gpiozero.output_devices.PWMOutputDevice(cfg.motor_cw, True, 0, cfg.motor_pwmfreq, None)
-            motor_ccw       = gpiozero.output_devices.PWMOutputDevice(cfg.motor_ccw, True, 0, cfg.motor_pwmfreq, None)
+            motor_cw        = gpiozero.output_devices.PWMOutputDevice(cfg.motor_cw, True, 0, cfg.pwmfreq, None)
+            motor_ccw       = gpiozero.output_devices.PWMOutputDevice(cfg.motor_ccw, True, 0, cfg.pwmfreq, None)
             
             print(" forward speed 50%...")
             motor_cw.value  = 0.5*(cfg.maxduty/100)
             motor_ccw.value = 0
-            motor_cw.toggle()
-            motor_ccw.toggle()
-            time.sleep(1)
+            motor_cw.on()
+            motor_ccw.on()
+            time.sleep(2)
             print(" forward speed 100%...")
             motor_cw.value  = 1*(cfg.maxduty/100)
-            motor_ccw.value = 0
-            motor_cw.toggle()
-            motor_ccw.toggle()
-            time.sleep(1)
+            time.sleep(2)
             print(" speed 0%...")
-            motor_cw.value  = 0
-            motor_ccw.value = 0
-            motor_cw.toggle()
-            motor_ccw.toggle()
+            motor_cw.off()
+            motor_ccw.off()
             time.sleep(1)
             print(" backward speed 50%...")
             motor_cw.value  = 0
             motor_ccw.value = 0.5*(cfg.maxduty/100)
-            motor_cw.toggle()
-            motor_ccw.toggle()
-            time.sleep(1)
+            motor_cw.on()
+            motor_ccw.on()
+            time.sleep(2)
             print(" backward speed 100%...")
-            motor_cw.value  = 0
             motor_ccw.value = 1*(cfg.maxduty/100)
-            motor_cw.toggle()
-            motor_ccw.toggle()
-            time.sleep(1)
-            print(" speed 0%...")
-            motor_cw.value  = 0
-            motor_ccw.value = 0
-            motor_cw.toggle()
-            motor_ccw.toggle()
+            time.sleep(2)
+            rint(" speed 0%...")
+            motor_cw.off()
+            motor_ccw.off()
             time.sleep(1)
             print("   ...done!\n")
         else:
