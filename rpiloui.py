@@ -15,7 +15,7 @@
 ################################################################################
 # Import Libraries
 
-import apa102_pi
+
 import array
 import binascii
 import configparser
@@ -29,18 +29,23 @@ import subprocess
 import sys
 import time
 
-try:
+try:    
     import serial
 except ImportError:
     pass
-    ModulSerialMissing = True
+    MissingModule = True
 
 try:
     import gpiozero
 except ImportError:
     pass
-    ModulgpiozeroMissing = True
+    MissingModule = True
 
+try:    
+    import apa102_pi
+except ImportError:
+    pass
+    MissingModule = True
 
 ################################################################################
 # Constants
@@ -79,10 +84,8 @@ cmdupdate = "cd .."
 print('rpiloui ' + BUILDVERSION + ' - ' + BUILDDATE)
 
 # check for modules which might not be part of the standard python 3 installation
-if 'ModulSerialMissing' in locals():
-    print('\nMissing Module pyserial. Install by typing rpiloui -install')
-if 'ModulgpiozeroMissing' in locals():
-    print('\nMissing Module gpiozero. Install by typing rpiloui -install')
+if 'MissingModule' in locals():
+    print('\n One or more Missing Module detected. Install by typing rpiloui -install')
     
 # load config data from configuration file, check for valid data and sanitize
 # if necessary
@@ -108,7 +111,7 @@ if len(sys.argv) != 1:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "pyserial"])
         print("Installing gpiozero via pip... ")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "gpiozero"])            
-        print("Installing pyserial via pip... ")
+        print("Installing apa102-pi via pip... ")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "apa102-pi"])
         exit()
      
