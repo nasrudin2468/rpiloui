@@ -15,7 +15,7 @@
 ################################################################################
 # Import Libraries
 
-import apa102_pi
+
 import array
 import binascii
 import configparser
@@ -29,18 +29,23 @@ import subprocess
 import sys
 import time
 
-try:
+try:    
     import serial
 except ImportError:
     pass
-    ModulSerialMissing = True
+    MissingModule = True
 
 try:
     import gpiozero
 except ImportError:
     pass
-    ModulgpiozeroMissing = True
+    MissingModule = True
 
+try:    
+    import apa102_pi
+except ImportError:
+    pass
+    MissingModule = True
 
 ################################################################################
 # Constants
@@ -79,10 +84,8 @@ cmdupdate = "cd .."
 print('rpiloui ' + BUILDVERSION + ' - ' + BUILDDATE)
 
 # check for modules which might not be part of the standard python 3 installation
-if 'ModulSerialMissing' in locals():
-    print('\nMissing Module pyserial. Install by typing rpiloui -install')
-if 'ModulgpiozeroMissing' in locals():
-    print('\nMissing Module gpiozero. Install by typing rpiloui -install')
+if 'MissingModule' in locals():
+    print('\n One or more Missing Module detected. Install by typing rpiloui -install')
     
 # load config data from configuration file, check for valid data and sanitize
 # if necessary
@@ -108,7 +111,7 @@ if len(sys.argv) != 1:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "pyserial"])
         print("Installing gpiozero via pip... ")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "gpiozero"])            
-        print("Installing pyserial via pip... ")
+        print("Installing apa102-pi via pip... ")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "apa102-pi"])
         exit()
      
@@ -149,44 +152,34 @@ if len(sys.argv) != 1:
         if (rawtx != "n"):
             # Configure gpiozero pwm function
             # gpiozero.PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pin_factory=None)
-            motor_cw        = gpiozero.output_devices.PWMOutputDevice(cfg.motor_cw, True, 0, cfg.motor_pwmfreq, None)
-            motor_ccw       = gpiozero.output_devices.PWMOutputDevice(cfg.motor_ccw, True, 0, cfg.motor_pwmfreq, None)
+            motor_cw        = gpiozero.output_devices.PWMOutputDevice(cfg.motor_cw, True, 0, cfg.pwmfreq, None)
+            motor_ccw       = gpiozero.output_devices.PWMOutputDevice(cfg.motor_ccw, True, 0, cfg.pwmfreq, None)
             
             print(" forward speed 50%...")
             motor_cw.value  = 0.5*(cfg.maxduty/100)
             motor_ccw.value = 0
-            motor_cw.toggle()
-            motor_ccw.toggle()
-            time.sleep(1)
+            motor_cw.on()
+            motor_ccw.on()
+            time.sleep(2)
             print(" forward speed 100%...")
             motor_cw.value  = 1*(cfg.maxduty/100)
-            motor_ccw.value = 0
-            motor_cw.toggle()
-            motor_ccw.toggle()
-            time.sleep(1)
+            time.sleep(2)
             print(" speed 0%...")
-            motor_cw.value  = 0
-            motor_ccw.value = 0
-            motor_cw.toggle()
-            motor_ccw.toggle()
+            motor_cw.off()
+            motor_ccw.off()
             time.sleep(1)
             print(" backward speed 50%...")
             motor_cw.value  = 0
             motor_ccw.value = 0.5*(cfg.maxduty/100)
-            motor_cw.toggle()
-            motor_ccw.toggle()
-            time.sleep(1)
+            motor_cw.on()
+            motor_ccw.on()
+            time.sleep(2)
             print(" backward speed 100%...")
-            motor_cw.value  = 0
             motor_ccw.value = 1*(cfg.maxduty/100)
-            motor_cw.toggle()
-            motor_ccw.toggle()
-            time.sleep(1)
-            print(" speed 0%...")
-            motor_cw.value  = 0
-            motor_ccw.value = 0
-            motor_cw.toggle()
-            motor_ccw.toggle()
+            time.sleep(2)
+            rint(" speed 0%...")
+            motor_cw.off()
+            motor_ccw.off()
             time.sleep(1)
             print("   ...done!\n")
         else:
