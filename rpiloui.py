@@ -156,30 +156,34 @@ if len(sys.argv) != 1:
             motor_ccw       = gpiozero.output_devices.PWMOutputDevice(cfg.motor_ccw, True, 0, cfg.pwmfreq, None)
             
             print(" forward speed 50%...")
-            motor_cw.value  = 0.5*(cfg.maxduty/100)
-            motor_ccw.value = 0
             motor_cw.on()
             motor_ccw.on()
+            motor_cw.value  = 0.5*(cfg.maxduty/100)
+            motor_ccw.value = 1
             time.sleep(2)
             print(" forward speed 100%...")
-            motor_cw.value  = 1*(cfg.maxduty/100)
+            motor_cw.value  = 0*(cfg.maxduty/100)
             time.sleep(2)
             print(" speed 0%...")
-            motor_cw.off()
-            motor_ccw.off()
+            #motor_cw.off()
+            #motor_ccw.off()
+            motor_cw.value = 1
+            motor_ccw.value = 1
             time.sleep(1)
             print(" backward speed 50%...")
-            motor_cw.value  = 0
+            motor_cw.value  = 1
             motor_ccw.value = 0.5*(cfg.maxduty/100)
-            motor_cw.on()
-            motor_ccw.on()
+            #motor_cw.off()
+            #motor_ccw.on()
             time.sleep(2)
             print(" backward speed 100%...")
-            motor_ccw.value = 1*(cfg.maxduty/100)
+            motor_ccw.value = 0
             time.sleep(2)
-            rint(" speed 0%...")
-            motor_cw.off()
-            motor_ccw.off()
+            print(" speed 0%...")
+            #motor_cw.off()
+            #motor_ccw.off()
+            motor_cw.value  = 1
+            motor_ccw.value  = 1
             time.sleep(1)
             print("   ...done!\n")
         else:
