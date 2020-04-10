@@ -135,7 +135,7 @@ if len(sys.argv) != 1:
         rawtx = input(" - LED test: (enter n if you want to skip this test)")
         if (rawtx != "n"):
             i = 0
-            subprocess.call("py runcolorcycle.py", shell=True) 
+            subprocess.call("python3 runcolorcycle.py", shell=True) 
             
             #while (i < 140):
             #    # Todo: implement routine which lights up sequentially all installed APA102 LEDs
