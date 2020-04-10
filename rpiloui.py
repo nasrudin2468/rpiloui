@@ -193,12 +193,49 @@ if len(sys.argv) != 1:
         rawtx = input(" - mux input test: (enter n if you want to skip this test)")
         if (rawtx != "n"):
             print ("   stop mux test by pressing CTRL + C")
-            while (1):  
+            mux_a = gpiozero.DigitalOutputDevice(cfg.mux_coin, True, False, None)
+            mux_b = gpiozero.DigitalOutputDevice(cfg.mux_tilt, True, False, None)
+            mux_c = gpiozero.DigitalOutputDevice(cfg.mux_action, True, False, None)
+            
+            in0 = gpiozero.InputDevice(cfg.mux_0, True, None, None)
+            in1 = gpiozero.InputDevice(cfg.mux_1, True, None, None)
+            in2 = gpiozero.InputDevice(cfg.mux_2, True, None, None)
+            in3 = gpiozero.InputDevice(cfg.mux_3, True, None, None)
+            in4 = gpiozero.InputDevice(cfg.mux_4, True, None, None)
+            in5 = gpiozero.InputDevice(cfg.mux_5, True, None, None)
+            in6 = gpiozero.InputDevice(cfg.mux_6, True, None, None)
+            in7 = gpiozero.InputDevice(cfg.mux_7, True, None, None)
+            while (1): 
                 # TODO: Implement method which periodically scans all muxed inputs, compares
                 # the new state to the old ones and reports changes via cmd line, until CTRL + C
                 # is pressed
                 k = 0
-   
+                
+                
+                mux_a.on()
+                print("mux A")
+                time.sleep(0.1)
+                listmux_a = [in0.is_active,in1.is_active, in2.is_active, in3.is_active, in4.is_active, in5.is_active, in6.is_active, in7.is_active]
+                print(listmux_a)
+                time.sleep(1)
+                mux_a.off()
+                mux_b.on()
+                #print("mux B")
+                time.sleep(0.1)
+                listmux_a = [in0.is_active,in1.is_active, in2.is_active, in3.is_active, in4.is_active, in5.is_active, in6.is_active, in7.is_active]
+                print(listmux_a)
+                
+                time.sleep(1)
+                mux_b.off()
+                mux_c.on()
+                #print("mux C")
+                time.sleep(0.1)
+                listmux_a = [in0.is_active,in1.is_active, in2.is_active, in3.is_active, in4.is_active, in5.is_active, in6.is_active, in7.is_active]
+                print(listmux_a)
+                time.sleep(1)
+                mux_c.off()
+                mux_c.off()
+                
         else:
             print ("test skipped.\n")
             
