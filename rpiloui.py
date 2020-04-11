@@ -65,8 +65,8 @@ except ImportError:
 
 ################################################################################
 # Constants
-BUILDVERSION     = "0.0.2"
-BUILDDATE         = "2020-03-25"
+BUILDVERSION    = "0.0.2"
+BUILDDATE       = "2020-03-25"
 
 
 ################################################################################
@@ -80,7 +80,7 @@ class sampleclass:
 ################################################################################
 # Import external functions
 
-import src.config as cfg
+import src.config   as cfg
 import src.hwtest   as hwtest
 import src.install  as install
 

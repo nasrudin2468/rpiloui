@@ -47,6 +47,11 @@ import configparser
 # Import external functions
 
 
+# Prevent direct access to this file since it would be useless
+if __name__ == '__main__':
+	exit()
+
+
 ################################################################################
 # Functions
 
