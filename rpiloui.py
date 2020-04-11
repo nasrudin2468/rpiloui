@@ -64,7 +64,7 @@ class sampleclass:
 ################################################################################
 # Import external functions
 
-import lib.config as cfg
+import src.config as cfg
 
 
 ################################################################################
