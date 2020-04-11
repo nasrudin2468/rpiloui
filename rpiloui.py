@@ -82,6 +82,7 @@ class sampleclass:
 
 import src.config as cfg
 import src.hwtest   as hwtest
+import src.install  as install
 
 
 ################################################################################
@@ -122,14 +123,7 @@ if len(sys.argv) != 1:
         exit()
 
     elif (sys.argv[1] in ( "-install")):
-        print("Install required libraries. Requires internet connection! Might need admin / root...")
-
-        print("Installing pyserial via pip... ")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "pyserial"])
-        print("Installing gpiozero via pip... ")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "gpiozero"])            
-        print("Installing apa102-pi via pip... ")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "apa102-pi"])
+        install.install()
         exit()
      
     elif (sys.argv[1] in ( "-play")):
