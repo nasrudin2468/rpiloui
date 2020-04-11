@@ -132,6 +132,18 @@ if len(sys.argv) != 1:
         print("hardware testmodus.")
         
         rawtx = ""   
+        rawtx = input(" - audio test: (enter n if you want to skip this test)")
+        if (rawtx != "n"):
+            subprocess.call("aplay /usr/share/sounds/alsa/Front_Left.wav", shell=True)
+            time.sleep(1)
+            subprocess.call("aplay /usr/share/sounds/alsa/Front_Center.wav", shell=True)
+            time.sleep(1)
+            subprocess.call("aplay /usr/share/sounds/alsa/Front_Right.wav", shell=True)
+            
+        else:
+            print ("test skipped.\n")
+        
+        rawtx = ""   
         rawtx = input(" - LED test: (enter n if you want to skip this test)")
         if (rawtx != "n"):
             i = 0
