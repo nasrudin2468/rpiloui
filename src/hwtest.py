@@ -46,6 +46,7 @@ import time
 ################################################################################
 # Import external functions
 
+from . import motor
 
 # Prevent direct access to this file since it would be useless
 if __name__ == '__main__':
@@ -89,41 +90,46 @@ def hwtest(arrcfg):
     rawtx = ""
     rawtx = input(" - motor test: (enter n if you want to skip this test)")
     if (rawtx != "n"):
-        # Configure gpiozero pwm function
-        # gpiozero.PWMOutputDevice(pin, *, active_high=True, initial_value=0, frequency=100, pin_factory=None)
-        motor_cw        = gpiozero.output_devices.PWMOutputDevice(arrcfg.motor_cw, True, 0, arrcfg.pwmfreq, None)
-        motor_ccw       = gpiozero.output_devices.PWMOutputDevice(arrcfg.motor_ccw, True, 0, arrcfg.pwmfreq, None)
+        motor.init(motor, arrcfg)
+        i = 0
+        k = 0
+        while (i < 100):
+            # Todo: implement routine which lights up sequentially all installed APA102 LEDs
+            print ("Motor Speed [%]: ",i)
+            if (i == 0):
+                k == 0
+            else:
+                k = (i/100)
+                
+            motor._set(motor, (k))
+            time.sleep(0.05)
+            i+=1  
+        
+        while (i > -100):
+            # Todo: implement routine which lights up sequentially all installed APA102 LEDs
+            print ("Motor Speed [%]: ",i)
+            if (i == 0):
+                k == 0
+            else:
+                k = (i/100)
+                
+            motor._set(motor, (k))
+            time.sleep(0.05)
+            i-= 1 
             
-        print(" forward speed 50%...")
-        motor_cw.on()
-        motor_ccw.on()
-        motor_cw.value  = 0.5*(arrcfg.maxduty/100)
-        motor_ccw.value = 1
-        time.sleep(2)
-        print(" forward speed 100%...")
-        motor_cw.value  = 0*(arrcfg.maxduty/100)
-        time.sleep(2)
-        print(" speed 0%...")
-        #motor_cw.off()
-        #motor_ccw.off()
-        motor_cw.value = 1
-        motor_ccw.value = 1
-        time.sleep(1)
-        print(" backward speed 50%...")
-        motor_cw.value  = 1
-        motor_ccw.value = 0.5*(arrcfg.maxduty/100)
-        #motor_cw.off()
-        #motor_ccw.on()
-        time.sleep(2)
-        print(" backward speed 100%...")
-        motor_ccw.value = 0
-        time.sleep(2)
-        print(" speed 0%...")
-        #motor_cw.off()
-        #motor_ccw.off()
-        motor_cw.value  = 1
-        motor_ccw.value  = 1
-        time.sleep(1)
+        while (i < 0):
+            # Todo: implement routine which lights up sequentially all installed APA102 LEDs
+            print ("Motor Speed [%]: ",i)
+            if (i == 0):
+                k == 0
+            else:
+                k = (i/100)
+                
+            motor._set(motor, (k))
+            time.sleep(0.05)
+            i+= 1
+        
+        motor._set(motor, (0))
         print("   ...done!\n")
     else:
         print ("test skipped.\n")

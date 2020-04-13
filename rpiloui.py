@@ -83,7 +83,7 @@ class sampleclass:
 import src.config   as cfg
 import src.hwtest   as hwtest
 import src.install  as install
-
+import src.motor    as motor
 
 ################################################################################
 # Functions

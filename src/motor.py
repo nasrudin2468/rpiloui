@@ -31,8 +31,12 @@
 ################################################################################
 # Import Libraries
 
+import gpiozero
+
+
 ################################################################################
 # Constants
+
 
 ################################################################################
 # classes / structs
@@ -47,13 +51,57 @@ class sampleclass:
 # Import external functions
 
 
-
 ################################################################################
 # Functions
 
-# _init(pinl, pinr, limit)
-# _turncw(speed, (frequency)
-# _turnccw, (speed, (frequency)
-# _frequency(frequency)
+# function: init(arrcfg)
+# Initiate motor pwm module using gpiozero and pin configuration from 
+# configarray 
+#    Input:  objmotor - motorobject containing pwmzero objects, current speed
+#            and direction
+#            arrcfg - configuration array holding hardware pin adress,
+#            pwm frequency, maximum dutycycle and minimum direction deathtime
+#    Output: -
+def init(objmotor, arrcfg):
+    # PWM pin Control Objects provided by pgiozero
+    objmotor.cw             = gpiozero.output_devices.PWMOutputDevice(arrcfg.motor_cw, True, 0, arrcfg.pwmfreq, None)
+    objmotor.ccw            = gpiozero.output_devices.PWMOutputDevice(arrcfg.motor_ccw, True, 0, arrcfg.pwmfreq, None)
+    objmotor.targetspeed    = 0                 # final motorspeed
+    objmotor.acceleration   = 0                 # motor acceleration 
+    objmotor.actualspeed    = 0                 # actual motor speed
+    objmotor.maxduty        = arrcfg.maxduty    # maximum allowed pwm dutycycle
+    
+    # Activate PWM Outputs
+    objmotor.cw.on()
+    objmotor.ccw.on()
+
+
+# function: _set(objmotor, speed)
+# set motor speed and direction based on given speed variable
+# WARNING: lowlevelfunction: might cause hardware damage since output deathtime
+# on direction change and acceleration value are ignored!
+#    Input:  objmotor - motorobject containing pwmzero objects, current speed
+#            and direction
+#            speed - speed of the motor (-1 to 1). positive value: clockwise
+#            direction. negative value: counter clockwise direction
+#    Output: -
+def _set(objmotor, speed):
+    
+    if (speed > 0):
+        # clockwise direction
+        objmotor.cw.value  = 1 - abs(speed) * (objmotor.maxduty/100)
+        objmotor.ccw.value = 1
+    
+    elif (speed == 0):
+        # motor stop
+        objmotor.cw.value  = 1
+        objmotor.ccw.value = 1
+        
+    elif (speed < 0):
+        # counterclockwise direction
+        objmotor.cw.value  = 1
+        objmotor.ccw.value = 1 - abs(speed) * (objmotor.maxduty/100)
+        
+    objmotor.actualspeed = speed    
 
 
