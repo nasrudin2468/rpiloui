@@ -63,7 +63,6 @@ if __name__ == '__main__':
 def hwtest(arrcfg):    
     print("hardware testmodus.")
         
-    rawtx = ""   
     rawtx = input(" - audio test: (enter n if you want to skip this test)")
     if (rawtx != "n"):
         subprocess.call("aplay ./user/audiofiles/audiotest.wav", shell=True)
@@ -86,15 +85,15 @@ def hwtest(arrcfg):
         # Todo: Shut off all LEDs
     else:
         print ("test skipped.\n")        
-        
-    rawtx = ""
+    
     rawtx = input(" - motor test: (enter n if you want to skip this test)")
     if (rawtx != "n"):
         motor.init(motor, arrcfg)
         i = 0
         k = 0
+        
+        # Speed motor up from 0% to 100% clockwise
         while (i < 100):
-            # Todo: implement routine which lights up sequentially all installed APA102 LEDs
             print ("Motor Speed [%]: ",i)
             if (i == 0):
                 k == 0
@@ -105,8 +104,9 @@ def hwtest(arrcfg):
             time.sleep(0.05)
             i+=1  
         
+        
+        # Decrease motor speed from +100% clockwise to -100% (counterclockwise)
         while (i > -100):
-            # Todo: implement routine which lights up sequentially all installed APA102 LEDs
             print ("Motor Speed [%]: ",i)
             if (i == 0):
                 k == 0
@@ -116,9 +116,10 @@ def hwtest(arrcfg):
             motor._set(motor, (k))
             time.sleep(0.05)
             i-= 1 
-            
+        
+        
+        # Decrease motor speed from -100% (counterclockwise) to 0%
         while (i < 0):
-            # Todo: implement routine which lights up sequentially all installed APA102 LEDs
             print ("Motor Speed [%]: ",i)
             if (i == 0):
                 k == 0
@@ -134,7 +135,7 @@ def hwtest(arrcfg):
     else:
         print ("test skipped.\n")
         
-    rawtx = ""
+
     rawtx = input(" - mux input test: (enter n if you want to skip this test)")
     if (rawtx != "n"):
         print ("   stop mux test by pressing CTRL + C")

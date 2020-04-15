@@ -49,16 +49,16 @@ import configparser
 
 # Prevent direct access to this file since it would be useless
 if __name__ == '__main__':
-	exit()
+    exit()
 
 
 ################################################################################
 # Functions
 
-# function:	read(arrcfg)
-# 	- 	reads config file and saves variables into given array
-# 	Input:	name of array to save 
-#	Output:	modifies input
+# function:    read(arrcfg)
+#     -     reads config file and saves variables into given array
+#     Input:    arrcfg - name of array to save 
+#    Output:    modifies input: arrcfg
 def read(arrcfg):
 	# create new Parser and read file
 	config = configparser.ConfigParser()

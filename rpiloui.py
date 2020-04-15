@@ -65,16 +65,12 @@ except ImportError:
 
 ################################################################################
 # Constants
-BUILDVERSION    = "0.0.2"
-BUILDDATE       = "2020-03-25"
+CODEVERSION    = "0.0.3"
+CODEDATE       = "2020-04-15"
 
 
 ################################################################################
 # classes / structs
-    
-class sampleclass:
-    def __init__(self):
-        self.samplevalue=0
                
         
 ################################################################################
@@ -99,7 +95,7 @@ def signal_handler(signal, frame):
 cmdupdate = "cd .."
 
 # print welcome msg with app name and build version
-print('rpiloui ' + BUILDVERSION + ' - ' + BUILDDATE)
+print('rpiloui ' + CODEVERSION + ' - ' + CODEDATE)
 
 # check for modules which might not be part of the standard python 3 installation
 if 'MissingModule' in locals():
