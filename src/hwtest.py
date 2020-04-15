@@ -46,7 +46,7 @@ import time
 ################################################################################
 # Import external functions
 
-from . import motor
+import motor
 
 # Prevent direct access to this file since it would be useless
 if __name__ == '__main__':
@@ -96,7 +96,7 @@ def hwtest(arrcfg):
         while (i < 100):
             print ("Motor Speed [%]: ",i)
             if (i == 0):
-                k == 0
+                k = 0
             else:
                 k = (i/100)
                 
@@ -109,7 +109,7 @@ def hwtest(arrcfg):
         while (i > -100):
             print ("Motor Speed [%]: ",i)
             if (i == 0):
-                k == 0
+                k = 0
             else:
                 k = (i/100)
                 
@@ -122,7 +122,7 @@ def hwtest(arrcfg):
         while (i < 0):
             print ("Motor Speed [%]: ",i)
             if (i == 0):
-                k == 0
+                k = 0
             else:
                 k = (i/100)
                 

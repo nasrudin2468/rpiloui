@@ -54,7 +54,7 @@ if __name__ == '__main__':
 ################################################################################
 # Functions
 
-# function: init(arrcfg)
+# function: init(objmotor, arrcfg)
 # Initiate motor pwm module using gpiozero and pin configuration from 
 # configarray 
 #    Input:  objmotor - motorobject containing pwmzero objects, current speed
