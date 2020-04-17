@@ -81,6 +81,7 @@ class struct:
 # Import external functions
 
 import src.config   as cfg
+import src.game     as game
 import src.hwtest   as hwtest
 import src.install  as install
 import src.motor    as motor
@@ -128,7 +129,7 @@ if len(sys.argv) != 1:
         exit()
      
     elif (sys.argv[1] in ( "-play")):
-        print("not implemented. ")
+        game.start(conf)
         exit()
  
     elif (sys.argv[1] in ( "-update")):
@@ -141,7 +142,7 @@ if len(sys.argv) != 1:
         exit()
 
     elif (sys.argv[1] in ( "-hwtest")):  
-        hwtest.hwtest(cfg)
+        hwtest.hwtest(conf)
         exit()
     
     else: 
