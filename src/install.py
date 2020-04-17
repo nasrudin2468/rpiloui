@@ -67,4 +67,6 @@ def install():
     subprocess.check_call([sys.executable, "-m", "pip", "install", "gpiozero"])            
     print("Installing apa102-pi via pip... ")
     subprocess.check_call([sys.executable, "-m", "pip", "install", "apa102-pi"])
+    
+
         
