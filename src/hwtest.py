@@ -45,8 +45,8 @@ import time
 ################################################################################
 # Import external functions
 
-import motor
-import muxio
+from . import motor
+from . import muxio
 
 
 # Prevent direct access to this file since it would be useless
@@ -63,6 +63,10 @@ if __name__ == '__main__':
 #    Output: -
 def hwtest(objcfg):    
     print("hardware testmodus.")
+    
+    # Initiate hardware first
+    motor.init(motor, objcfg)
+    muxio.init(muxio, objcfg)
         
     rawtx = input(" - audio test: (enter n if you want to skip this test)")
     if (rawtx != "n"):
@@ -89,7 +93,6 @@ def hwtest(objcfg):
     
     rawtx = input(" - motor test: (enter n if you want to skip this test)")
     if (rawtx != "n"):
-        motor.init(motor, arrcfg)
         i = 0
         k = 0
         
@@ -139,8 +142,8 @@ def hwtest(objcfg):
 
     rawtx = input(" - mux input test: (enter n if you want to skip this test)")
     if (rawtx != "n"):
-        muxio.init(muxio, arrcfg)
-        testtime = time.time()+60
+        testtime = time.time()+30   # Run test for 30 seconds
+        muxio.update(muxio)         # Update to inital state since different actors have different Idle states
         
         while (time.time() < testtime):
             muxio.poll(muxio)
