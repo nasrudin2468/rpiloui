@@ -53,33 +53,36 @@ if __name__ == '__main__':
 ################################################################################
 # Functions
 
-# function: init(arrcfg)
+# function: init(objmuxio, objcfg)
 # Initiate mux input using gpiozero and pin configuration from configarray 
 #    Input:  objmuxio - muxio object containing gpio objects and current input
 #            and last processed input status
-#            arrcfg - configuration array holding hardware pin adresses and
+#            objcfg - data object holding hardware pin adresses and
 #            sensor mux mapping
 #    Output: -
-def init(objmuxio, arrcfg):
+def init(objmuxio, objcfg):
     # Initiate mux control output pins using gpiozero
-    objmuxio.coin       = gpiozero.DigitalOutputDevice(arrcfg.mux_coin, True, False, None)
-    objmuxio.tilt       = gpiozero.DigitalOutputDevice(arrcfg.mux_tilt, True, False, None)
-    objmuxio.action     = gpiozero.DigitalOutputDevice(arrcfg.mux_action, True, False, None)
+    objmuxio.coin       = gpiozero.DigitalOutputDevice(objcfg.mux_coin, True, False, None)
+    objmuxio.tilt       = gpiozero.DigitalOutputDevice(objcfg.mux_tilt, True, False, None)
+    objmuxio.action     = gpiozero.DigitalOutputDevice(objcfg.mux_action, True, False, None)
     
     # Initiate mux input pins using gpiozero
-    objmuxio.input[0]   = gpiozero.InputDevice(arrcfg.mux[0], True, None, None)
-    objmuxio.input[1]   = gpiozero.InputDevice(arrcfg.mux[1], True, None, None)
-    objmuxio.input[2]   = gpiozero.InputDevice(arrcfg.mux[2], True, None, None)
-    objmuxio.input[3]   = gpiozero.InputDevice(arrcfg.mux[3], True, None, None)
-    objmuxio.input[4]   = gpiozero.InputDevice(arrcfg.mux[4], True, None, None)
-    objmuxio.input[5]   = gpiozero.InputDevice(arrcfg.mux[5], True, None, None)
-    objmuxio.input[6]   = gpiozero.InputDevice(arrcfg.mux[6], True, None, None)
-    objmuxio.input[7]   = gpiozero.InputDevice(arrcfg.mux[7], True, None, None)
+    objmuxio.input      = [None] * 8
+    objmuxio.input[0]   = gpiozero.InputDevice(objcfg.mux.input[0], True, None, None)
+    objmuxio.input[1]   = gpiozero.InputDevice(objcfg.mux.input[1], True, None, None)
+    objmuxio.input[2]   = gpiozero.InputDevice(objcfg.mux.input[2], True, None, None)
+    objmuxio.input[3]   = gpiozero.InputDevice(objcfg.mux.input[3], True, None, None)
+    objmuxio.input[4]   = gpiozero.InputDevice(objcfg.mux.input[4], True, None, None)
+    objmuxio.input[5]   = gpiozero.InputDevice(objcfg.mux.input[5], True, None, None)
+    objmuxio.input[6]   = gpiozero.InputDevice(objcfg.mux.input[6], True, None, None)
+    objmuxio.input[7]   = gpiozero.InputDevice(objcfg.mux.input[7], True, None, None)
     
     # Define arrays for current and last processed status
+    objmuxio.currentstate           = type('', (), {})
     objmuxio.currentstate.coin      = [0, 0, 0, 0, 0, 0, 0, 0]
-    objmuxio.currentstate.til       = [0, 0, 0, 0, 0, 0, 0, 0]
+    objmuxio.currentstate.tilt      = [0, 0, 0, 0, 0, 0, 0, 0]
     objmuxio.currentstate.action    = [0, 0, 0, 0, 0, 0, 0, 0]
+    objmuxio.laststate           = type('', (), {})
     objmuxio.laststate.coin         = [0, 0, 0, 0, 0, 0, 0, 0]
     objmuxio.laststate.tilt         = [0, 0, 0, 0, 0, 0, 0, 0]
     objmuxio.laststate.action       = [0, 0, 0, 0, 0, 0, 0, 0]
@@ -88,9 +91,10 @@ def init(objmuxio, arrcfg):
     objmuxio.laststate.time         = 0 # timestamp for last change of last state
     
     # Define arrays for logical mapping from mux inputs to  connected actors
-    objmuxio.mapinput.coinsensor    = arrcfg.mapinput.coinsensor
-    objmuxio.mapinput.tiltsensor    = arrcfg.mapinput.tiltsensor
-    objmuxio.mapinput.actionbutton  = arrcfg.mapinput.actionbutton
+    objmuxio.mapinput               = type('', (), {})
+    objmuxio.mapinput.coinsensor    = objcfg.mapinput.coinsensor
+    objmuxio.mapinput.tiltsensor    = objcfg.mapinput.tiltsensor
+    objmuxio.mapinput.actionbutton  = objcfg.mapinput.actionbutton
     
 
 # function: poll(objmuxio):
@@ -105,36 +109,36 @@ def poll(objmuxio):
     objmuxio.currentstate.time      = datetime.datetime.now()
     
     # Prepare MUX control to read out coin sensors
-    objmuxio.mux_a.on()
-    objmuxio.mux_b.off()
-    objmuxio.mux_c.off()
+    objmuxio.coin.on()
+    objmuxio.tilt.off()
+    objmuxio.action.off()
     
     # Read Inputs muxed to coin sensors and save values in correct place using mapinput
-    for i in objmuxio.currentstate.coin:
+    for i in range(0, 8, 1):
         objmuxio.currentstate.coin[i] = int(objmuxio.input[objmuxio.mapinput.coinsensor [i]].is_active) 
-    
+        
     # Prepare MUX control to read out tilt sensors
-    objmuxio.mux_a.off()
-    objmuxio.mux_b.on()
-    objmuxio.mux_c.off()
+    objmuxio.coin.off()
+    objmuxio.tilt.on()
+    objmuxio.action.off()
     
     # Read Inputs muxed to tilt sensors and save values in correct place using mapinput
-    for i in objmuxio.currentstate.tilt:
+    for i in range(0, 8, 1):
         objmuxio.currentstate.tilt[i] = int(objmuxio.input[objmuxio.mapinput.tiltsensor [i]].is_active)
         
     # Prepare MUX control to read out action buttons
-    objmuxio.mux_a.off()
-    objmuxio.mux_b.off()
-    objmuxio.mux_c.on()
+    objmuxio.coin.off()
+    objmuxio.tilt.off()
+    objmuxio.action.on()
     
     # Read Inputs muxed to action button and save values in correct place using mapinput
-    for i in objmuxio.currentstate.action:
+    for i in range(0, 8, 1):
         objmuxio.currentstate.action[i] = int(objmuxio.input[objmuxio.mapinput.actionbutton [i]].is_active)
     
     # Deactivate MUX in order to reduce electric load on PSU
-    objmuxio.mux_a.off()
-    objmuxio.mux_b.off()    
-    objmuxio.mux_c.off()
+    objmuxio.coin.off()
+    objmuxio.tilt.off()    
+    objmuxio.action.off()
     
 
 # function: update(objmuxio):
@@ -147,9 +151,9 @@ def update(objmuxio):
     objmuxio.laststate.time      = datetime.datetime.now()
     
     # Copy Current values into laststate
-    objmuxio.laststate.coin     = objmuxio.currentstate.coin
-    objmuxio.laststate.tilt     = objmuxio.currentstate.tilt
-    objmuxio.laststate.action   = objmuxio.currentstate.action
+    objmuxio.laststate.coin     = objmuxio.currentstate.coin[:]
+    objmuxio.laststate.tilt     = objmuxio.currentstate.tilt[:]
+    objmuxio.laststate.action   = objmuxio.currentstate.action[:]
 
     
 # function: debugreaddelta(objmuxio):
@@ -160,27 +164,28 @@ def update(objmuxio):
 def debugreaddelta(objmuxio):
 
     # Check coin sensors
-    for i in objmuxio.currentstate.coin:
+    for i in range(0, 8, 1):
         if objmuxio.currentstate.coin[i] > objmuxio.laststate.coin[i]:
             print("- Coin sensor ", i, ": Coin vanished!")
         
-        elif objmuxio.currentstate.coin[i] > objmuxio.laststate.coin[i]:
+        elif objmuxio.currentstate.coin[i] < objmuxio.laststate.coin[i]:
             print("- Coin sensor ", i, ": Coin detected.")
-            
+        
     # Check tilt sensors
-    for i in objmuxio.currentstate.tilt:
+    for i in range(0, 8, 1):
         if objmuxio.currentstate.tilt[i] > objmuxio.laststate.tilt[i]:
             print("- Tilt Sensor ", i, ": lever released.")
         
         elif objmuxio.currentstate.tilt[i] < objmuxio.laststate.tilt[i]:
             print("- Tilt Sensor ", i, ": lever pressed!")
-            
+    
+
     # Check action buttons
-    for i in objmuxio.currentstate.action:
+    for i in range(0, 8, 1):
         if objmuxio.currentstate.action[i] > objmuxio.laststate.action[i]:
             print("- Action button ", i, ": pressed!")
         
         elif objmuxio.currentstate.action[i] < objmuxio.laststate.action[i]:
             print("- Action button ", i, ": released")
         
-
+        
