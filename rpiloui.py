@@ -71,6 +71,10 @@ CODEDATE       = "2020-04-17"
 
 ################################################################################
 # classes / structs
+
+class struct:
+    # Class used for struct like data objects without any methods
+    def __init__(self, **entries): self.__dict__.update(entries)
                
         
 ################################################################################
@@ -101,10 +105,11 @@ print('rpiloui ' + CODEVERSION + ' - ' + CODEDATE)
 if 'MissingModule' in locals():
     print('\n One or more Missing Module detected. Install by typing rpiloui -install')
     
-# load config data from configuration file, check for valid data and sanitize
-# if necessary
-cfg.read(cfg)
-cfg.sanitize(cfg)
+# create data object, load config data from configuration file, check for valid data 
+# and sanitize if necessary
+conf = struct()
+cfg.read(conf)
+cfg.sanitize(conf)
 
 
 # check for given command line arguments

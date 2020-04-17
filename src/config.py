@@ -55,107 +55,112 @@ if __name__ == '__main__':
 ################################################################################
 # Functions
 
-# function:    read(arrcfg)
+# function:    read(objcfg)
 #     -     reads config file and saves variables into given array
-#     Input:    arrcfg - name of array to save 
-#    Output:    modifies input: arrcfg
-def read(arrcfg):
+#     Input:    objcfg - name of object which will hold save data
+#    Output:    modifies input: objcfg
+def read(objcfg):
     # create new Parser and read file
     config = configparser.ConfigParser()
     config.read('rpiloui.cfg')
     
     # Save values from file into given array
     # MAIN
-    arrcfg.debug         = config['MAIN']['debug']
+    objcfg.debug        = config['MAIN']['debug']
     
     #GAMESETTINGS
-    arrcfg.game.tiltmaxtime        = int(config['GAMESETTINGS']['tiltmaxtime'])
-    arrcfg.game.tiltrecovery    = int(config['GAMESETTINGS']['tiltmaxtime'])
+    objcfg.game                 = type('', (), {})
+    objcfg.game.tiltmaxtime     = int(config['GAMESETTINGS']['tiltmaxtime'])
+    objcfg.game.tiltrecovery    = float(config['GAMESETTINGS']['tiltrecovery'])
     
     #CALIBRATION
-    arrcfg.maxduty         = int(config['CALIBRATION']['maxduty'])
-    arrcfg.pwmfreq        = int(config['CALIBRATION']['pwmfreq'])
-    arrcfg.dirdeathtime = int(config['CALIBRATION']['dirdeathtime'])
+    objcfg.maxduty      = int(config['CALIBRATION']['maxduty'])
+    objcfg.pwmfreq      = int(config['CALIBRATION']['pwmfreq'])
+    objcfg.dirdeathtime = int(config['CALIBRATION']['dirdeathtime'])
     
     #PINMAPPING
-    arrcfg.led_di         = int(config['PINMAPPING']['led-di'])
-    arrcfg.led_ci         = int(config['PINMAPPING']['led-ci'])
+    objcfg.led_di       = int(config['PINMAPPING']['led-di'])
+    objcfg.led_ci       = int(config['PINMAPPING']['led-ci'])
     
-    arrcfg.motor_cw     = int(config['PINMAPPING']['motor-cw'])
-    arrcfg.motor_ccw     = int(config['PINMAPPING']['motor-ccw'])
-    
-    arrcfg.mux_coin        = int(config['PINMAPPING']['mux-coin'])
-    arrcfg.mux_tilt        = int(config['PINMAPPING']['mux-tilt'])
-    arrcfg.mux_action    = int(config['PINMAPPING']['mux-action'])
-    
-    arrcfg.mux[0]        = int(config['PINMAPPING']['mux-0'])
-    arrcfg.mux[1]        = int(config['PINMAPPING']['mux-1'])
-    arrcfg.mux[2]        = int(config['PINMAPPING']['mux-2'])
-    arrcfg.mux[3]        = int(config['PINMAPPING']['mux-3'])
-    arrcfg.mux[4]        = int(config['PINMAPPING']['mux-4'])
-    arrcfg.mux[5]        = int(config['PINMAPPING']['mux-5'])
-    arrcfg.mux[6]        = int(config['PINMAPPING']['mux-6'])
-    arrcfg.mux[7]        = int(config['PINMAPPING']['mux-7'])
+    objcfg.motor_cw     = int(config['PINMAPPING']['motor-cw'])
+    objcfg.motor_ccw    = int(config['PINMAPPING']['motor-ccw'])
+    objcfg.mux          = type('', (), {})
+    objcfg.mux_coin     = int(config['PINMAPPING']['mux-coin'])
+    objcfg.mux_tilt     = int(config['PINMAPPING']['mux-tilt'])
+    objcfg.mux_action   = int(config['PINMAPPING']['mux-action'])
+    objcfg.mux.input    = [None] * 8
+    objcfg.mux.input[0] = int(config['PINMAPPING']['mux-0'])
+    objcfg.mux.input[1] = int(config['PINMAPPING']['mux-1'])
+    objcfg.mux.input[2] = int(config['PINMAPPING']['mux-2'])
+    objcfg.mux.input[3] = int(config['PINMAPPING']['mux-3'])
+    objcfg.mux.input[4] = int(config['PINMAPPING']['mux-4'])
+    objcfg.mux.input[5] = int(config['PINMAPPING']['mux-5'])
+    objcfg.mux.input[6] = int(config['PINMAPPING']['mux-6'])
+    objcfg.mux.input[7] = int(config['PINMAPPING']['mux-7'])
     
     #MUXMAPPING
-    arrcfg.mapinput.coinsensor[0]    = int(config['MUXMAPPING']['coin0'])
-    arrcfg.mapinput.coinsensor[1]    = int(config['MUXMAPPING']['coin1'])
-    arrcfg.mapinput.coinsensor[2]    = int(config['MUXMAPPING']['coin2'])
-    arrcfg.mapinput.coinsensor[3]    = int(config['MUXMAPPING']['coin3'])
-    arrcfg.mapinput.coinsensor[4]    = int(config['MUXMAPPING']['coin4'])
-    arrcfg.mapinput.coinsensor[5]    = int(config['MUXMAPPING']['coin5'])
-    arrcfg.mapinput.coinsensor[6]    = int(config['MUXMAPPING']['coin6'])
-    arrcfg.mapinput.coinsensor[7]    = int(config['MUXMAPPING']['coin7'])
+    objcfg.mapinput                 = type('', (), {})
+    objcfg.mapinput.coinsensor      = [None] * 8
+    objcfg.mapinput.coinsensor[0]   = int(config['MUXMAPPING']['coin0'])
+    objcfg.mapinput.coinsensor[1]   = int(config['MUXMAPPING']['coin1'])
+    objcfg.mapinput.coinsensor[2]   = int(config['MUXMAPPING']['coin2'])
+    objcfg.mapinput.coinsensor[3]   = int(config['MUXMAPPING']['coin3'])
+    objcfg.mapinput.coinsensor[4]   = int(config['MUXMAPPING']['coin4'])
+    objcfg.mapinput.coinsensor[5]   = int(config['MUXMAPPING']['coin5'])
+    objcfg.mapinput.coinsensor[6]   = int(config['MUXMAPPING']['coin6'])
+    objcfg.mapinput.coinsensor[7]   = int(config['MUXMAPPING']['coin7'])
     
-    arrcfg.mapinput.tiltsensor[0]    = int(config['MUXMAPPING']['tilt0'])
-    arrcfg.mapinput.tiltsensor[1]    = int(config['MUXMAPPING']['tilt1'])
-    arrcfg.mapinput.tiltsensor[2]    = int(config['MUXMAPPING']['tilt2'])
-    arrcfg.mapinput.tiltsensor[3]    = int(config['MUXMAPPING']['tilt3'])
-    arrcfg.mapinput.tiltsensor[4]    = int(config['MUXMAPPING']['tilt4'])
-    arrcfg.mapinput.tiltsensor[5]    = int(config['MUXMAPPING']['tilt5'])
-    arrcfg.mapinput.tiltsensor[6]    = int(config['MUXMAPPING']['tilt6'])
-    arrcfg.mapinput.tiltsensor[7]    = int(config['MUXMAPPING']['tilt7'])
+    objcfg.mapinput.tiltsensor      = [None] * 8
+    objcfg.mapinput.tiltsensor[0]   = int(config['MUXMAPPING']['tilt0'])
+    objcfg.mapinput.tiltsensor[1]   = int(config['MUXMAPPING']['tilt1'])
+    objcfg.mapinput.tiltsensor[2]   = int(config['MUXMAPPING']['tilt2'])
+    objcfg.mapinput.tiltsensor[3]   = int(config['MUXMAPPING']['tilt3'])
+    objcfg.mapinput.tiltsensor[4]   = int(config['MUXMAPPING']['tilt4'])
+    objcfg.mapinput.tiltsensor[5]   = int(config['MUXMAPPING']['tilt5'])
+    objcfg.mapinput.tiltsensor[6]   = int(config['MUXMAPPING']['tilt6'])
+    objcfg.mapinput.tiltsensor[7]   = int(config['MUXMAPPING']['tilt7'])
     
-    arrcfg.mapinput.actionbutton[0]    = int(config['MUXMAPPING']['action0'])
-    arrcfg.mapinput.actionbutton[1]    = int(config['MUXMAPPING']['action1'])
-    arrcfg.mapinput.actionbutton[2]    = int(config['MUXMAPPING']['action2'])
-    arrcfg.mapinput.actionbutton[3]    = int(config['MUXMAPPING']['action3'])
-    arrcfg.mapinput.actionbutton[4]    = int(config['MUXMAPPING']['action4'])
-    arrcfg.mapinput.actionbutton[5]    = int(config['MUXMAPPING']['action5'])
-    arrcfg.mapinput.actionbutton[6]    = int(config['MUXMAPPING']['action6'])
-    arrcfg.mapinput.actionbutton[7]    = int(config['MUXMAPPING']['action7'])    
+    objcfg.mapinput.actionbutton    = [None] * 8
+    objcfg.mapinput.actionbutton[0] = int(config['MUXMAPPING']['action0'])
+    objcfg.mapinput.actionbutton[1] = int(config['MUXMAPPING']['action1'])
+    objcfg.mapinput.actionbutton[2] = int(config['MUXMAPPING']['action2'])
+    objcfg.mapinput.actionbutton[3] = int(config['MUXMAPPING']['action3'])
+    objcfg.mapinput.actionbutton[4] = int(config['MUXMAPPING']['action4'])
+    objcfg.mapinput.actionbutton[5] = int(config['MUXMAPPING']['action5'])
+    objcfg.mapinput.actionbutton[6] = int(config['MUXMAPPING']['action6'])
+    objcfg.mapinput.actionbutton[7] = int(config['MUXMAPPING']['action7'])    
 
 
-# function:    sanitize(arrcfg)
+# function:    sanitize(objcfg)
 #     -    checks configuration variables for faulty values and correct them 
 #          in order to prevent faulty game behavior or hardware damage 
-#     Input:    name of array
+#     Input:    name of object holding config data
 #    Output:    -
-def sanitize(arrcfg):
+def sanitize(objcfg):
     
-    if arrcfg.maxduty <= 1:
-        arrcfg.maxduty = 1
+    if objcfg.maxduty <= 1:
+        objcfg.maxduty = 1
     
-    elif arrcfg.maxduty > 100:
-        arrcfg.maxduty = 100
+    elif objcfg.maxduty > 100:
+        objcfg.maxduty = 100
             
-    if arrcfg.dirdeathtime < 1:
-        arrcfg.dirdeathtime = 1
+    if objcfg.dirdeathtime < 1:
+        objcfg.dirdeathtime = 1
             
-    elif arrcfg.dirdeathtime > 1000:
-        arrcfg.dirdeathtime = 1000
+    elif objcfg.dirdeathtime > 1000:
+        objcfg.dirdeathtime = 1000
         
-    if arrcfg.game.tiltmaxtime < 1:
-        arrcfg.game.tiltmaxtime = 1
+    if objcfg.game.tiltmaxtime < 1:
+        objcfg.game.tiltmaxtime = 1
     
-    elif arrcfg.game.tiltmaxtime > 10:
-        arrcfg.game.tiltmaxtime = 10
+    elif objcfg.game.tiltmaxtime > 10:
+        objcfg.game.tiltmaxtime = 10
             
-    if arrcfg.game.tiltrecover < 0.1:
-        arrcfg.game.tiltrecover = 0.1
+    if objcfg.game.tiltrecovery < 0.1:
+        objcfg.game.tiltrecovery = 0.1
     
-    elif arrcfg.game.tiltrecover > 10:
-        arrcfg.game.tiltrecover = 10
+    elif objcfg.game.tiltrecovery > 10:
+        objcfg.game.tiltrecovery = 10
 
 
     

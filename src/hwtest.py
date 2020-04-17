@@ -61,7 +61,7 @@ if __name__ == '__main__':
 # reads config file and saves variables into given array
 #    Input:  name of array containing hardware configuration
 #    Output: -
-def hwtest(arrcfg):    
+def hwtest(objcfg):    
     print("hardware testmodus.")
         
     rawtx = input(" - audio test: (enter n if you want to skip this test)")

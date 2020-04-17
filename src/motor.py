@@ -62,14 +62,14 @@ if __name__ == '__main__':
 #            arrcfg - configuration array holding hardware pin adress,
 #            pwm frequency, maximum dutycycle and minimum direction deathtime
 #    Output: -
-def init(objmotor, arrcfg):
+def init(objmotor, objcfg):
     # PWM pin Control Objects provided by pgiozero
-    objmotor.cw             = gpiozero.output_devices.PWMOutputDevice(arrcfg.motor_cw, True, 0, arrcfg.pwmfreq, None)
-    objmotor.ccw            = gpiozero.output_devices.PWMOutputDevice(arrcfg.motor_ccw, True, 0, arrcfg.pwmfreq, None)
+    objmotor.cw             = gpiozero.output_devices.PWMOutputDevice(objcfg.motor_cw, True, 0, objcfg.pwmfreq, None)
+    objmotor.ccw            = gpiozero.output_devices.PWMOutputDevice(objcfg.motor_ccw, True, 0, objcfg.pwmfreq, None)
     objmotor.targetspeed    = 0                 # final motorspeed
     objmotor.acceleration   = 0                 # motor acceleration 
     objmotor.actualspeed    = 0                 # actual motor speed
-    objmotor.maxduty        = arrcfg.maxduty    # maximum allowed pwm dutycycle
+    objmotor.maxduty        = objcfg.maxduty    # maximum allowed pwm dutycycle
     
     # Activate PWM Outputs
     objmotor.cw.on()
