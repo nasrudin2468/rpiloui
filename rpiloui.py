@@ -108,9 +108,10 @@ if 'MissingModule' in locals():
     
 # create data object, load config data from configuration file, check for valid data 
 # and sanitize if necessary
-conf = struct()
-cfg.read(conf)
-cfg.sanitize(conf)
+conf = cfg.objconfig()
+#cfg.read(conf)
+
+#cfg.sanitize(conf)
 
 
 # check for given command line arguments
