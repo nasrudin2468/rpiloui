@@ -66,7 +66,9 @@ def hwtest(objcfg):
     
     # Initiate hardware first
     motor.init(motor, objcfg)
-    muxio.init(muxio, objcfg)
+    #muxio.init(muxio, objcfg)
+    objmuxio = muxio.muxiodata(objcfg)      # create mux data object
+    funcmuxio = muxio.muxiofunc(objcfg)     # create mux control object
         
     rawtx = input(" - audio test: (enter n if you want to skip this test)")
     if (rawtx != "n"):
@@ -142,13 +144,13 @@ def hwtest(objcfg):
 
     rawtx = input(" - mux input test: (enter n if you want to skip this test)")
     if (rawtx != "n"):
-        testtime = time.time()+30   # Run test for 30 seconds
-        muxio.update(muxio)         # Update to inital state since different actors have different Idle states
+        testtime = time.time()+30               # Run test for 30 seconds
+        muxio.update(objmuxio)                  # Update to inital state since different actors have different Idle states
         
         while (time.time() < testtime):
-            muxio.poll(muxio)
-            muxio.debugreaddelta(muxio)
-            muxio.update(muxio)
+            muxio.poll(objmuxio, funcmuxio)     # poll actual muxdata
+            muxio.debugreaddelta(objmuxio)      # report changed values via console
+            muxio.update(objmuxio)              # update muxdata object 
                 
     else:
         print ("test skipped.\n")
