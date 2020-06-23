@@ -83,13 +83,6 @@ def hwtest(objcfg):
         i = 0
         subprocess.call("python3 ./lib/_runcolorcycle.py", shell=True )
             
-        #while (i < 140):
-        #    # Todo: implement routine which lights up sequentially all installed APA102 LEDs
-        #    print ("LED:",i)
-        #    time.sleep(0.1)
-        #    i+=1  
-        #print("   ...done!\n")
-        # Todo: Shut off all LEDs
     else:
         print ("test skipped.\n")        
     

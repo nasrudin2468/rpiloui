@@ -30,11 +30,29 @@
 ################################################################################
 # Import Libraries
 
+import multiprocessing  as mp
 import random
+import time
 
 
 ################################################################################
 # Constants
+
+STMSTART    = 0
+STMRESET    = 1
+STMRUN      = 2
+STMSTOP     = 3
+
+COIN        = 0
+TILT        = 1
+BUTTON      = 2
+
+RELEASED    = 0
+DETECTED    = 0
+VANISHED    = 1
+PRESSED     = 1
+
+
 
 
 ################################################################################
