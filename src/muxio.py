@@ -40,7 +40,52 @@ import gpiozero
 
 ################################################################################
 # classes / structs
-               
+
+class state:
+    def __init__(self):
+        # Define arrays for current processed status
+        self.coin      = [0, 0, 0, 0, 0, 0, 0, 0]
+        self.tilt      = [0, 0, 0, 0, 0, 0, 0, 0]
+        self.action    = [0, 0, 0, 0, 0, 0, 0, 0]
+        self.time      = 0 # timestamp for last change of current state
+
+class mapinput:
+    def __init__(self, objcfg):
+        # Define arrays for logical mapping from mux inputs to  connected actors
+        self.coinsensor    = objcfg.mapinput.coinsensor
+        self.tiltsensor    = objcfg.mapinput.tiltsensor
+        self.actionbutton  = objcfg.mapinput.actionbutton
+
+class muxiofunc:
+    def __init__(self, objcfg):
+        # Initiate mux control output pins using gpiozero
+        self.coin           = gpiozero.DigitalOutputDevice(objcfg.mux_coin, True, False, None)
+        self.tilt           = gpiozero.DigitalOutputDevice(objcfg.mux_tilt, True, False, None)
+        self.action         = gpiozero.DigitalOutputDevice(objcfg.mux_action, True, False, None)
+        
+        # Initiate mux input pins using gpiozero
+        self.input      = [None] * 8
+        self.input[0]   = gpiozero.InputDevice(objcfg.mux.input[0], True, None, None)
+        self.input[1]   = gpiozero.InputDevice(objcfg.mux.input[1], True, None, None)
+        self.input[2]   = gpiozero.InputDevice(objcfg.mux.input[2], True, None, None)
+        self.input[3]   = gpiozero.InputDevice(objcfg.mux.input[3], True, None, None)
+        self.input[4]   = gpiozero.InputDevice(objcfg.mux.input[4], True, None, None)
+        self.input[5]   = gpiozero.InputDevice(objcfg.mux.input[5], True, None, None)
+        self.input[6]   = gpiozero.InputDevice(objcfg.mux.input[6], True, None, None)
+        self.input[7]   = gpiozero.InputDevice(objcfg.mux.input[7], True, None, None)
+        
+class muxiodata:
+    def __init__(self, objcfg):
+        # Define arrays for current and last processed status
+        self.currentstate   = state()
+        self.laststate      = state()
+            
+        # Define arrays for logical mapping from mux inputs to  connected actors   
+        self.mapinput       = mapinput(objcfg)
+        
+        
+       
+        
         
 ################################################################################
 # Import external functions
@@ -50,51 +95,9 @@ import gpiozero
 if __name__ == '__main__':
     exit()
 
+
 ################################################################################
 # Functions
-
-# function: init(objmuxio, objcfg)
-# Initiate mux input using gpiozero and pin configuration from configarray 
-#    Input:  objmuxio - muxio object containing gpio objects and current input
-#            and last processed input status
-#            objcfg - data object holding hardware pin adresses and
-#            sensor mux mapping
-#    Output: -
-def init(objmuxio, objcfg):
-    # Initiate mux control output pins using gpiozero
-    objmuxio.coin       = gpiozero.DigitalOutputDevice(objcfg.mux_coin, True, False, None)
-    objmuxio.tilt       = gpiozero.DigitalOutputDevice(objcfg.mux_tilt, True, False, None)
-    objmuxio.action     = gpiozero.DigitalOutputDevice(objcfg.mux_action, True, False, None)
-    
-    # Initiate mux input pins using gpiozero
-    objmuxio.input      = [None] * 8
-    objmuxio.input[0]   = gpiozero.InputDevice(objcfg.mux.input[0], True, None, None)
-    objmuxio.input[1]   = gpiozero.InputDevice(objcfg.mux.input[1], True, None, None)
-    objmuxio.input[2]   = gpiozero.InputDevice(objcfg.mux.input[2], True, None, None)
-    objmuxio.input[3]   = gpiozero.InputDevice(objcfg.mux.input[3], True, None, None)
-    objmuxio.input[4]   = gpiozero.InputDevice(objcfg.mux.input[4], True, None, None)
-    objmuxio.input[5]   = gpiozero.InputDevice(objcfg.mux.input[5], True, None, None)
-    objmuxio.input[6]   = gpiozero.InputDevice(objcfg.mux.input[6], True, None, None)
-    objmuxio.input[7]   = gpiozero.InputDevice(objcfg.mux.input[7], True, None, None)
-    
-    # Define arrays for current and last processed status
-    objmuxio.currentstate           = type('', (), {})
-    objmuxio.currentstate.coin      = [0, 0, 0, 0, 0, 0, 0, 0]
-    objmuxio.currentstate.tilt      = [0, 0, 0, 0, 0, 0, 0, 0]
-    objmuxio.currentstate.action    = [0, 0, 0, 0, 0, 0, 0, 0]
-    objmuxio.laststate           = type('', (), {})
-    objmuxio.laststate.coin         = [0, 0, 0, 0, 0, 0, 0, 0]
-    objmuxio.laststate.tilt         = [0, 0, 0, 0, 0, 0, 0, 0]
-    objmuxio.laststate.action       = [0, 0, 0, 0, 0, 0, 0, 0]
-    
-    objmuxio.currentstate.time      = 0 # timestamp for last change of current state
-    objmuxio.laststate.time         = 0 # timestamp for last change of last state
-    
-    # Define arrays for logical mapping from mux inputs to  connected actors
-    objmuxio.mapinput               = type('', (), {})
-    objmuxio.mapinput.coinsensor    = objcfg.mapinput.coinsensor
-    objmuxio.mapinput.tiltsensor    = objcfg.mapinput.tiltsensor
-    objmuxio.mapinput.actionbutton  = objcfg.mapinput.actionbutton
     
 
 # function: poll(objmuxio):
@@ -104,41 +107,41 @@ def init(objmuxio, objcfg):
 #            and last processed input status
 #
 #    Output: -
-def poll(objmuxio):
+def poll(objmuxio, funcmuxio):
     # Update timestamp
     objmuxio.currentstate.time      = datetime.datetime.now()
     
     # Prepare MUX control to read out coin sensors
-    objmuxio.coin.on()
-    objmuxio.tilt.off()
-    objmuxio.action.off()
+    funcmuxio.coin.on()
+    funcmuxio.tilt.off()
+    funcmuxio.action.off()
     
     # Read Inputs muxed to coin sensors and save values in correct place using mapinput
     for i in range(0, 8, 1):
-        objmuxio.currentstate.coin[i] = int(objmuxio.input[objmuxio.mapinput.coinsensor [i]].is_active) 
+        objmuxio.currentstate.coin[i] = int(funcmuxio.input[objmuxio.mapinput.coinsensor [i]].is_active) 
         
     # Prepare MUX control to read out tilt sensors
-    objmuxio.coin.off()
-    objmuxio.tilt.on()
-    objmuxio.action.off()
+    funcmuxio.coin.off()
+    funcmuxio.tilt.on()
+    funcmuxio.action.off()
     
     # Read Inputs muxed to tilt sensors and save values in correct place using mapinput
     for i in range(0, 8, 1):
-        objmuxio.currentstate.tilt[i] = int(objmuxio.input[objmuxio.mapinput.tiltsensor [i]].is_active)
+        objmuxio.currentstate.tilt[i] = int(funcmuxio.input[objmuxio.mapinput.tiltsensor [i]].is_active)
         
     # Prepare MUX control to read out action buttons
-    objmuxio.coin.off()
-    objmuxio.tilt.off()
-    objmuxio.action.on()
+    funcmuxio.coin.off()
+    funcmuxio.tilt.off()
+    funcmuxio.action.on()
     
     # Read Inputs muxed to action button and save values in correct place using mapinput
     for i in range(0, 8, 1):
-        objmuxio.currentstate.action[i] = int(objmuxio.input[objmuxio.mapinput.actionbutton [i]].is_active)
+        objmuxio.currentstate.action[i] = int(funcmuxio.input[objmuxio.mapinput.actionbutton [i]].is_active)
     
     # Deactivate MUX in order to reduce electric load on PSU
-    objmuxio.coin.off()
-    objmuxio.tilt.off()    
-    objmuxio.action.off()
+    funcmuxio.coin.off()
+    funcmuxio.tilt.off()    
+    funcmuxio.action.off()
     
 
 # function: update(objmuxio):
