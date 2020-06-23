@@ -34,8 +34,18 @@
 import datetime
 import gpiozero
 
+
 ################################################################################
 # Constants
+
+COIN        = 0
+TILT        = 1
+BUTTON      = 2
+
+RELEASED    = 0
+VANISHED    = 0
+DETECTED    = 1
+PRESSED     = 1
 
 
 ################################################################################
@@ -169,26 +179,42 @@ def debugreaddelta(objmuxio):
     # Check coin sensors
     for i in range(0, 8, 1):
         if objmuxio.currentstate.coin[i] > objmuxio.laststate.coin[i]:
-            print("- Coin sensor ", i, ": Coin vanished!")
+            print("- Coin sensor", i, ": Coin vanished!")
         
         elif objmuxio.currentstate.coin[i] < objmuxio.laststate.coin[i]:
-            print("- Coin sensor ", i, ": Coin detected.")
+            print("- Coin sensor", i, ": Coin detected.")
         
     # Check tilt sensors
     for i in range(0, 8, 1):
         if objmuxio.currentstate.tilt[i] > objmuxio.laststate.tilt[i]:
-            print("- Tilt Sensor ", i, ": lever released.")
+            print("- Tilt Sensor", i, ": lever released.")
         
         elif objmuxio.currentstate.tilt[i] < objmuxio.laststate.tilt[i]:
-            print("- Tilt Sensor ", i, ": lever pressed!")
+            print("- Tilt Sensor", i, ": lever pressed!")
     
 
     # Check action buttons
     for i in range(0, 8, 1):
         if objmuxio.currentstate.action[i] > objmuxio.laststate.action[i]:
-            print("- Action button ", i, ": pressed!")
+            print("- Action button", i, ": pressed!")
         
         elif objmuxio.currentstate.action[i] < objmuxio.laststate.action[i]:
-            print("- Action button ", i, ": released")
+            print("- Action button", i, ": released")
+
+def waschanged(objmuxio, inputtype, state, inputnumber):
+    if (inputtype == COIN):
+        if ((objmuxio.currentstate.coin[inputnumber] == state) and (objmuxio.laststate.coin[inputnumber] != state)):
+            return True
+       
+    elif (inputtype == TILT):
+        if ((objmuxio.currentstate.tilt[inputnumber] == state) and (objmuxio.laststate.tilt[inputnumber] != state)):
+            return True
         
+    elif (inputtype == BUTTON):
+        if ((objmuxio.currentstate.action[inputnumber] == state) and (objmuxio.laststate.action[inputnumber] != state)):
+            return True
         
+    else:
+        print ("muxio.waschanged(): invalid inputtype!")
+    
+    return False  
