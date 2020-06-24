@@ -32,6 +32,7 @@
 
 import subprocess
 import time
+import multiprocessing as mp
 
 
 ################################################################################
@@ -149,4 +150,26 @@ def hwtest(objcfg):
         print ("test skipped.\n")
             
     print("hardware test finished.")
+
+
+def playdemosound():
+    subprocess.call("aplay ./user/audiofiles/demoaudio.wav", shell=True)
     
+# function:  demo(arrcfg)
+# show of all hardware functions
+#    Input:  name of array containing hardware configuration
+#    Output: -
+def demo(objcfg): 
+    # Initiate hardware first
+    motor.init(motor, objcfg)
+    #muxio.init(muxio, objcfg)
+    objmuxio = muxio.muxiodata(objcfg)      # create mux data object
+    funcmuxio = muxio.muxiofunc(objcfg)     # create mux control object
+    
+    
+    playdemo = mp.Process(target=playdemosound, args=())
+    time.sleep(2)
+    motor._set(motor, (0.6))
+    playdemo.start()
+    while (True):
+        subprocess.call("python3 ./lib/demoled.py", shell=True )

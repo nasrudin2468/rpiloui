@@ -146,6 +146,10 @@ if len(sys.argv) != 1:
         hwtest.hwtest(conf)
         exit()
     
+    elif (sys.argv[1] in ( "-demo")):  
+        hwtest.demo(conf)
+        exit()
+    
     else: 
         print('Invalid command line argument given. type rpiloui - help for valid arguments')
         exit()
