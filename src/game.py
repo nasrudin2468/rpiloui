@@ -62,6 +62,10 @@ PRESSED     = 1
 ################################################################################
 # Import external functions
 
+from . import motor
+from . import muxio
+from . import config
+
 
 # Prevent direct access to this file since it would be useless
 if __name__ == '__main__':
@@ -71,19 +75,109 @@ if __name__ == '__main__':
 ################################################################################
 # Functions
 
+
+def pmuxio(pipe):
+# function: pmuxio(pipe)
+# subprocess target function for scanning and analyzing mux input state
+#    Input:  data pipe object (defined on creation of subprocess)
+#    Output: -
+    
+    #create local data object by receive copy from pipe
+    objmuxio = pipe.recv()
+    
+    funcmuxio = muxio.muxiofunc(config.objconfig())   # create mux control object
+    
+    while (True):
+        muxio.poll(objmuxio, funcmuxio)     # poll actual muxdata (currentstate)
+        pipe.send(objmuxio.currentstate)    # pipe it to main process
+        time.sleep(0.05)                    # wait for next scan cycle
+
+
 # function: start()
 # Initiate Game by calling hardware inits and pass over to the game statemachine 
 #    Input:  name of array containing configuration data
 #    Output: -
-def start(arrcfg):
-    random.seed(a=None, version=2)  #    Initiate random number generator
+def start(objcfg):
+    random.seed(a=None, version=2)          # Initiate random number generator
     
+    objmuxio = muxio.muxiodata(objcfg)      # Create muxdata object
+    parent_muxio, child_muxio = mp.Pipe()   # Create pipe for mux data exchange
+                                            # between main process and mux
+                                            # hardware scan process
+    motor.init(motor, objcfg)               # Initiate motor hardware and create
+                                            # motor data object
+    
+    # create game logic data list
+    game = type('', (), {})
+    game.state = 0
+    game.playercoins = [3] * 8
+    game.looser = 0
+    game.state = 0
+
+    # send mux data object first time for object creation within child process
+    parent_muxio.send(objmuxio)            
+    
+    # define child process processmuxio, define pmuxio as target function and
+    # child_muxio as argument
+    processmuxio = mp.Process(target=pmuxio, args=(child_muxio,))
+    
+    processmuxio.start()                    # start process
+    print ("STM: Start")
+
+    #muxio.update(objmuxio)                  # Update to inital state since different actors have different Idle states
+
     while (True):
-        statemachine()
+        statemachine(parent_muxio, motor, objmuxio, game)
 
 
-def statemachine():
-    pass    
+def statemachine(pipeobject, objmotor, objmuxio, game):
+    if game.state == 0:
+        if pipeobject.poll() == True:
+            objmuxio.currentstate = pipeobject.recv()
+            for i in range(0, 8 , 1):
+                if (muxio.waschanged(objmuxio, BUTTON, RELEASED, i) == True):
+                    game.state = 1
+                    print ("STM: Reset!")
+            muxio.update(objmuxio)
+    
+    elif game.state == 1:
+        game.playercoins = [3,3,3,3,3,3,3,3]    # Reset Coin Counters
+        motor._set(objmotor, 0.5)               # Start Motor
+        game.state = STMRUN                     # Switch to RUN
+        print ("STM: RUN")
+        muxio.update(objmuxio)
+    
+    elif game.state == 2:
+        # Check individual coin counters
+        if pipeobject.poll() == True:
+            objmuxio.currentstate = (pipeobject.recv())
+            for i in range(0, 8 , 1):
+                if (muxio.waschanged(objmuxio, COIN, VANISHED, i) == True):
+                    game.playercoins[i] -= 1
+                    print ("player", i, "coins left", game.playercoins[i])  
+            muxio.update(objmuxio)
+        
+        # Goto stop if looser is detected
+        for i in range(0, 8, 1):
+            if (game.playercoins[i] < 1):
+                game.looser = i
+                game.state = 3
+                print ("STM: Stop")
+                print ("player",game.looser,"lost this round. Cheers!")
+       
+    
+    elif game.state == 3:
+        motor._set(objmotor, 0)   # Stop motor
+        # TODO: looser animation
+        # switch to reset if looser button is activated
+        if pipeobject.poll() == True:
+            objmuxio.currentstate = (pipeobject.recv())
+            for i in range(0, 8 , 1):
+                if (muxio.waschanged(objmuxio, BUTTON, RELEASED, i) == True):
+                    print ("STM: Reset!")
+                    game.state = 1
+            muxio.update(objmuxio)
+    
 
 
 '''
