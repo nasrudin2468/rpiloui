@@ -42,19 +42,6 @@ import configparser
 ################################################################################
 # classes / structs
 
-
-################################################################################
-# Import external functions
-
-
-# Prevent direct access to this file since it would be useless
-if __name__ == '__main__':
-    exit()
-
-
-################################################################################
-# Functions
-
 class objgame:
     def __init__(self):
         # create new Parser and read file
@@ -148,8 +135,19 @@ class objconfig:
     
         #MUXMAPPING
         self.mapinput          = objmapinput()
-    
-        
+
+
+################################################################################
+# Import external functions
+
+
+# Prevent direct access to this file since it would be useless
+if __name__ == '__main__':
+    exit()
+
+
+################################################################################
+# Functions        
     
 # function:    read(objcfg)
 #     -     reads config file and saves variables into given array

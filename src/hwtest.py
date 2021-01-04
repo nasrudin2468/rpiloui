@@ -33,7 +33,7 @@
 import subprocess
 import time
 import multiprocessing as mp
-
+from apa102_pi.driver import apa102
 
 ################################################################################
 # Constants
@@ -70,6 +70,7 @@ def hwtest(objcfg):
     #muxio.init(muxio, objcfg)
     objmuxio = muxio.muxiodata(objcfg)      # create mux data object
     funcmuxio = muxio.muxiofunc(objcfg)     # create mux control object
+    objledfunc = apa102.APA102(num_led=152, global_brightness=20, mosi=10, sclk=11, order='rgb')
         
     rawtx = input(" - audio test: (enter n if you want to skip this test)")
     if (rawtx != "n"):
@@ -81,8 +82,39 @@ def hwtest(objcfg):
     rawtx = ""   
     rawtx = input(" - LED test: (enter n if you want to skip this test)")
     if (rawtx != "n"):
+        k = 0
+        while (k < 9):
+            i = 0
+            while (i < 152):
+                objledfunc.set_pixel(i, 255, 255, 255, 50)
+                i+=1
+            objledfunc.show()
+            time.sleep(0.01)
+            objledfunc.clear_strip()
+            time.sleep(0.01)
+            k+=1
+        
+        
         i = 0
-        subprocess.call("python3 ./lib/_runcolorcycle.py", shell=True )
+        while (i < 152):
+            objledfunc.set_pixel(i, 0, 0, 255, 50)
+            objledfunc.show()
+            i+=1 
+        time.sleep(2)
+        i = 0
+        while (i < 152):
+            objledfunc.set_pixel(i, 0, 255, 0, 50)
+            objledfunc.show()
+            i+=1 
+        time.sleep(2)
+        i = 0
+        while (i < 152):
+            objledfunc.set_pixel(i, 255, 0, 0, 50)
+            objledfunc.show()
+            i+=1 
+        time.sleep(2)
+        objledfunc.clear_strip()
+            
             
     else:
         print ("test skipped.\n")        
@@ -168,8 +200,8 @@ def demo(objcfg):
     
     
     playdemo = mp.Process(target=playdemosound, args=())
-    time.sleep(2)
-    motor._set(motor, (0.6))
     playdemo.start()
+    time.sleep(0.5)
+    motor._set(motor, (1))
     while (True):
         subprocess.call("python3 ./lib/demoled.py", shell=True )

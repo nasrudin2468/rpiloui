@@ -85,6 +85,7 @@ import src.game     as game
 import src.hwtest   as hwtest
 import src.install  as install
 import src.motor    as motor
+#import src.ledlight as led
 
 ################################################################################
 # Functions
